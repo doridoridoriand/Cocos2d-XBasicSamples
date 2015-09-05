@@ -15,14 +15,14 @@ class HelloWorld : public cocos2d::Layer
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
 
+    // タップのイベントを宣言(プロトタイプ宣言)
+    virtual bool onTouchBegan(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchMoved(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchEnded(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
+
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
-
-    // タップのイベントを宣言
-    bool onTouchBegan(cocos2d::Touch*, touch, cocos2d::Event* unused_event);
-    void onTouchMoved(cocos2d::Touch*, touch, cocos2d::Event* unused_event);
-    void onTouchEnded(cocos2d::Touch*, touch, cocos2d::Event* unused_event);
-    void onTouchCancelled(cocos2d::Touch*, touch, cocos2d::Event* unused_event);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
