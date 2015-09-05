@@ -38,7 +38,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    // turn on display FPS
+    // ディスプレー上に画面書き換え数を表示するか否か
     director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
