@@ -3,8 +3,33 @@
 
 #include "cocos2d.h"
 
+// カードの種類を定義
+enum CardType {
+    Clubs = 0,
+    Diamonds,
+    Hearts,
+    Spades
+};
+
+// カード
+struct Card {
+    int number;
+    CardType type;
+};
+
+// カードを表示する位置
+struct PosIndex {
+    int x;
+    int y;
+};
+
 class Main : public cocos2d::Layer
 {
+protected:
+    std::vector<Card> _cards; // カード情報
+    void initCards(); // カード初期化
+    Card getCard(); // カードを取得
+
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();

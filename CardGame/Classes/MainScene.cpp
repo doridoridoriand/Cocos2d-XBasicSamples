@@ -1,6 +1,15 @@
 #include "MainScene.h"
 
+#define CARD_NUM 13 // 1種類あたりのカードの枚数
+#define CARD_TYPE_NUM 4 // カードの種類の総数
+#define CARD_1_POS_X 200 // 1番目のカードの位置(x)
+#define CARD_1_POS_Y 320 // 1番目のカードの位置(y)
+#define CARD_DISTANCE_X 140 // カード間の距離(x)
+#define CARD_DISTANCE_Y 200 // カード間の距離(y)
+#define Z_ORDER_SHOW_CARD 1 // 表示しているカードのZオーダー
+
 USING_NS_CC;
+using namespace std;
 
 Scene* Main::createScene()
 {
@@ -26,61 +35,38 @@ bool Main::init()
   {
     return false;
   }
-
-  Size visibleSize = Director::getInstance()->getVisibleSize();
-  Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-  /////////////////////////////
-  // 2. add a menu item with "X" image, which is clicked to quit the program
-  //    you may modify it.
-
-  // add a "close" icon to exit the progress. it's an autorelease object
-  auto closeItem = MenuItemImage::create(
-      "CloseNormal.png",
-      "CloseSelected.png",
-      CC_CALLBACK_1(Main::menuCloseCallback, this));
-
-  closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-        origin.y + closeItem->getContentSize().height/2));
-
-  // create menu, it's an autorelease object
-  auto menu = Menu::create(closeItem, NULL);
-  menu->setPosition(Vec2::ZERO);
-  this->addChild(menu, 1);
-
-  /////////////////////////////
-  // 3. add your codes below...
-
-  // add a label shows "Hello World"
-  // create and initialize a label
-
-  auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-
-  // position the label on the center of the screen
-  label->setPosition(Vec2(origin.x + visibleSize.width/2,
-        origin.y + visibleSize.height - label->getContentSize().height));
-
-  // add the label as a child to this layer
-  this->addChild(label, 1);
-
-  // add "Main" splash screen"
-  auto sprite = Sprite::create("HelloWorld.png");
-
-  // position the sprite on the center of the screen
-  sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-  // add the sprite as a child to this layer
-  this->addChild(sprite, 0);
-
   return true;
 }
 
+void Main::initCards() {
+  // 配列を用意
+  _cards.clear();
 
-void Main::menuCloseCallback(Ref* pSender)
-{
-  Director::getInstance()->end();
+  // カードを52枚用意する
+  for (int type = 0; type < CARD_TYPE_NUM; type++) {
+    for (int number = 1; number <= CARD_NUM; number++) {
+      // Card構造体を参照 => enumの中身を確認
+      Card card;
+      card.number = number;
+      card.type = (CardType)type;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-  exit(0);
-#endif
+      _cards.push_back(card);
+    }
+  }
+}
+
+Card Main::getCard() {
+  random_device rd;
+  // メルセンヌツイスターを使用して乱数を発生させる
+  mt19937 rand = mt19937(rd());
+
+  // インデックスをランダムに取得する
+  int index = uniform_int_distribution<int>(0, (int)_cards.size() - 1)(rand);
+
+  auto card = _cards[index];
+
+  // _cardsはあくまで中間生成物なので、必要なくなったらメモリ節約のために削除
+  _cards.erase(_cards.begin() + index);
+
+  return card;
 }
